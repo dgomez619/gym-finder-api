@@ -19,7 +19,17 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // Allows us to accept JSON data in requests
-app.use(cors()); // Allows your React app to connect
+
+// Add your Netlify URL here so it can talk to the backend
+const allowedOrigins = [
+  "http://localhost:5173",             // Local frontend
+  "https://mapagym.netlify.app"      // Live Netlify frontend
+];
+
+app.use(cors({
+  origin: allowedOrigins
+}));
+
 app.use(morgan('dev')); // Logs requests to the console
 
 // Mount routes
