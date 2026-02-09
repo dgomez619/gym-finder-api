@@ -18,22 +18,19 @@ const protect = asyncHandler(async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       // 4. Find the user associated with this token (exclude password)
-      // We attach the user to the request object so the next function can use it
       req.user = await User.findById(decoded.id).select('-password');
 
-      next(); // Pass control to the next function (e.g., createGym)
+      return next(); // ✅ RETURN here to exit early
     } catch (error) {
-      console.error(error);
+      console.error("🔴 Auth Error:", error.message);
       res.status(401);
       throw new Error('Not authorized, token failed');
     }
   }
 
-  if (!token) {
-    res.status(401);
-    throw new Error('Not authorized, no token');
-  }
+  // Only reach here if no Authorization header
+  res.status(401);
+  throw new Error('Not authorized, no token');
 });
 
-// 5. Export it so other files can use it
 export { protect };
