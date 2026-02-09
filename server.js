@@ -36,6 +36,21 @@ app.use(morgan('dev')); // Logs requests to the console
 app.use('/api/gyms', gymRoutes);
 app.use('/api/auth', authRoutes);
 
+// ----------------------------------------------
+// 🔴 ADD THIS ERROR HANDLER 🔴
+// ---------------------------------------------- 
+app.use((err, req, res, next) => {
+  console.error("❌ Server Error:", err.stack);
+
+  // If status code hasn't been set, default to 500
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+
+  res.status(statusCode).json({
+    success: false,
+    error: err.message || "Server Error"
+  });
+});
+
 // A simple test route to make sure it's alive
 app.get('/', (req, res) => {
   res.status(200).json({ 
