@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
-import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
 
-const protect = asyncHandler(async (req, res, next) => {
+const protect = async (req, res, next) => {
   let token;
 
   // 1. Check if the "Authorization" header exists and starts with "Bearer"
@@ -23,14 +22,12 @@ const protect = asyncHandler(async (req, res, next) => {
       return next(); // ✅ RETURN here to exit early
     } catch (error) {
       console.error("🔴 Auth Error:", error.message);
-      res.status(401);
-      throw new Error('Not authorized, token failed');
+      return res.status(401).json({ success: false, error: 'Not authorized, token failed' });
     }
   }
 
   // Only reach here if no Authorization header
-  res.status(401);
-  throw new Error('Not authorized, no token');
-});
+  return res.status(401).json({ success: false, error: 'Not authorized, no token' });
+};
 
 export { protect };
