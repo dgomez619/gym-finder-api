@@ -1,5 +1,6 @@
 import express from 'express';
 import { getGyms, createGym } from '../controllers/gymController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -7,6 +8,6 @@ const router = express.Router();
 // When a POST request hits the route, run createGym.
 router.route('/')
   .get(getGyms)
-  .post(createGym);
+  .post(protect, createGym);
 
 export default router;

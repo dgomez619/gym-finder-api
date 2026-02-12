@@ -1,5 +1,7 @@
 import express from 'express';
 
+console.log("✅ AUTH ROUTES FILE LOADED"); // <--- Add this line!
+
 // 1. IMPORT THE CONTROLLERS (register, login, getMe)
 import { register, login, getMe } from '../controllers/authController.js';
 

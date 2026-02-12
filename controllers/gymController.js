@@ -24,17 +24,21 @@ export const getGyms = async (req, res) => {
 // FIX 2: Use 'export const', not 'exports.createGym ='
 export const createGym = async (req, res, next) => {
   try {
+    console.log("🚀 STARTING SCOUT PROCESS..."); // Debug 1
+
     // Add user to req.body so the gym knows who owns it
     req.body.owner = req.user.id; 
 
     // 1. Create the Gym
     const gym = await Gym.create(req.body);
+    console.log("✅ Gym Created:", gym.name); // Debug 2
 
     // 2. GAMIFICATION: Reward the User
     // Find the user to update their stats
     const user = await User.findById(req.user.id);
     
     if (user) {
+        console.log(`👤 User Found: ${user.name} (Current XP: ${user.xp})`); // Debug 3
       // Add XP
       user.xp = (user.xp || 0) + 50;
       
@@ -42,6 +46,7 @@ export const createGym = async (req, res, next) => {
       if (user.scoutedGyms) {
         user.scoutedGyms.push(gym._id);
       }
+      console.log("➕ Added Gym to User History"); // Debug 4
 
       // Calculate Rank Logic
       if (user.xp >= 1000) user.rank = 'Iron Legend';
@@ -50,6 +55,7 @@ export const createGym = async (req, res, next) => {
       else if (user.xp >= 100) user.rank = 'Scout';
 
       await user.save(); 
+      console.log(`💾 USER SAVED! New XP: ${user.xp}`); // Debug 5
     }
 
     res.status(201).json({
