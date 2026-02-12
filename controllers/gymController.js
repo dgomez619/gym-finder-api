@@ -22,7 +22,7 @@ export const getGyms = async (req, res) => {
 // @route   POST /api/gyms
 // @access  Private
 // FIX 2: Use 'export const', not 'exports.createGym ='
-export const createGym = async (req, res, next) => {
+export const createGym = async (req, res) => {
   try {
     console.log("🚀 STARTING SCOUT PROCESS..."); // Debug 1
 
