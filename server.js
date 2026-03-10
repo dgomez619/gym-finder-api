@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 // routes
 import gymRoutes from './routes/gymRoutes.js';
 import authRoutes from './routes/authRoutes.js'; 
+import adminRoutes from './routes/adminRoutes.js';
 
 // Load env variables
 dotenv.config();
@@ -35,12 +36,13 @@ app.use(morgan('dev')); // Logs requests to the console
 // Mount routes
 app.use('/api/gyms', gymRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ----------------------------------------------
-// 🔴 ADD THIS ERROR HANDLER 🔴
+// ADD THIS ERROR HANDLER 
 // ---------------------------------------------- 
 app.use((err, req, res, next) => {
-  console.error("❌ Server Error:", err.stack);
+  console.error(" Server Error:", err.stack);
 
   // If status code hasn't been set, default to 500
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;

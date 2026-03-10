@@ -34,4 +34,20 @@ const protect = async (req, res, next) => {
   return res.status(401).json({ success: false, error: 'Not authorized, no token' });
 };
 
-export { protect };
+// The "...roles" allows us to pass a list of allowed roles, e.g., authorize('admin', 'owner')
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    // req.user is attached by the 'protect' middleware right before this runs
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        error: `Access denied. Role '${req.user ? req.user.role : 'unknown'}' is not authorized.`
+      });
+    }
+    
+    // Clearance granted. Proceed to the next function.
+    next(); 
+  };
+};
+
+export { protect, authorize };
